@@ -1,0 +1,255 @@
+---
+import CodeBlock from './CodeBlock.astro';
+---
+
+<section class="py-20 bg-gradient-to-b from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-950">
+  <div class="container">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-semibold mb-4">
+        Designed with developers in mind
+      </h2>
+      <p class="text-lg text-neutral-600 dark:text-neutral-400">
+        Clean, intuitive APIs that let you focus on building your application, not fighting the framework.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <div class="order-2 lg:order-1">
+        <h3 class="text-2xl font-medium mb-4">Elegant Routing</h3>
+        <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+          Define powerful routes with middleware, validation, and parameter handling. Support for RESTful resources, nested routes, and more.
+        </p>
+        
+        <CodeBlock language="javascript" title="routes.js">
+// Define modular routes
+const router = app.router();
+
+// Simple route
+router.get('/users', usersController.index);
+
+// Route with parameters
+router.get('/users/:id', usersController.show);
+
+// Routes with middleware
+router.post('/users', 
+  [auth.required, validation.user], 
+  usersController.create
+);
+
+// Resource routes
+router.resource('posts', postsController);
+
+// Group routes with shared middleware
+router.group({ middleware: [auth.required] }, (r) => {
+  r.get('/dashboard', dashboardController.index);
+  r.resource('comments', commentsController);
+});
+
+// Export router for use in application
+module.exports = router;</CodeBlock>
+      </div>
+      
+      <div class="order-1 lg:order-2">
+        <h3 class="text-2xl font-medium mb-4">Smart Controllers</h3>
+        <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+          Controllers make it easy to organize your application logic, with dependency injection, automatic request validation, and clean response handling.
+        </p>
+        
+        <CodeBlock language="javascript" title="UsersController.js">
+class UsersController {
+  constructor(userService, mailer) {
+    this.userService = userService;
+    this.mailer = mailer;
+  }
+  
+  async index(req, res) {
+    const users = await this.userService.getAll();
+    return res.json(users);
+  }
+  
+  async show(req, res) {
+    try {
+      const user = await this.userService.findById(req.params.id);
+      
+      if (!user) {
+        return res.status(404).json({ 
+          error: 'User not found' 
+        });
+      }
+      
+      return res.json(user);
+    } catch (error) {
+      return res.status(500).json({ 
+        error: 'Failed to retrieve user' 
+      });
+    }
+  }
+  
+  async create(req, res) {
+    const { email, name, password } = req.body;
+    
+    try {
+      const user = await this.userService.create({
+        email, name, password
+      });
+      
+      await this.mailer.sendWelcomeEmail(user);
+      
+      return res.status(201).json(user);
+    } catch (error) {
+      return res.status(400).json({ 
+        error: error.message 
+      });
+    }
+  }
+}
+
+module.exports = UsersController;</CodeBlock>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-12">
+      <div>
+        <h3 class="text-2xl font-medium mb-4">Type-Safe Models</h3>
+        <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+          Powerful ORM with type safety, relationships, and query builders that work across multiple database systems.
+        </p>
+        
+        <CodeBlock language="javascript" title="User.js">
+const { Model, DataTypes } = require('frame-api/db');
+
+class User extends Model {
+  static schema() {
+    return {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true
+        }
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      role: {
+        type: DataTypes.ENUM('user', 'admin'),
+        defaultValue: 'user'
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+    };
+  }
+  
+  static associations() {
+    return {
+      posts: {
+        relation: 'hasMany',
+        model: 'Post',
+        foreignKey: 'userId'
+      },
+      profile: {
+        relation: 'hasOne',
+        model: 'Profile',
+        foreignKey: 'userId'
+      }
+    };
+  }
+  
+  static hooks() {
+    return {
+      beforeSave: async (user) => {
+        if (user.changed('password')) {
+          user.password = await bcrypt.hash(user.password, 10);
+        }
+      }
+    };
+  }
+}
+
+module.exports = User;</CodeBlock>
+      </div>
+      
+      <div>
+        <h3 class="text-2xl font-medium mb-4">Robust Validation</h3>
+        <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+          Comprehensive validation system that ensures data integrity with custom validators, sanitization, and readable error messages.
+        </p>
+        
+        <CodeBlock language="javascript" title="validation.js">
+const { validator } = require('frame-api');
+
+// Define validation schemas
+const userSchema = validator.object({
+  name: validator.string()
+    .min(2)
+    .max(50)
+    .required()
+    .label('Full name'),
+    
+  email: validator.string()
+    .email()
+    .required()
+    .custom(async (value) => {
+      const exists = await User.findByEmail(value);
+      if (exists) {
+        throw new Error('Email already in use');
+      }
+    }),
+    
+  password: validator.string()
+    .min(8)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .message({
+      'string.pattern.base': 
+        'Password must contain at least one uppercase letter, 
+         one lowercase letter, and one number'
+    })
+    .required(),
+    
+  confirmPassword: validator.string()
+    .valid(validator.ref('password'))
+    .required()
+    .label('Confirm password')
+    .messages({
+      'any.only': 'Passwords do not match'
+    })
+});
+
+// Create middleware
+const validateUser = async (req, res, next) => {
+  try {
+    const validated = await userSchema.validateAsync(req.body, {
+      abortEarly: false,
+      stripUnknown: true
+    });
+    
+    // Replace request body with validated data
+    req.body = validated;
+    next();
+  } catch (error) {
+    res.status(400).json({
+      error: 'Validation failed',
+      details: error.details.map(err => ({
+        field: err.path[0],
+        message: err.message
+      }))
+    });
+  }
+};
+
+module.exports = { validateUser };</CodeBlock>
+      </div>
+    </div>
+  </div>
+</section>

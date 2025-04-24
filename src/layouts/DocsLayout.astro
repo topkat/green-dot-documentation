@@ -1,0 +1,38 @@
+---
+import Layout from './Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPage?: string;
+}
+
+const { 
+  title = 'Documentation',
+  description = 'Documentation for your backend framework',
+  currentPage = '' 
+} = Astro.props;
+---
+
+<Layout title={`${title} - Your Backend Framework`} description={description}>
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <div class="flex-1 container py-8">
+      <div class="flex flex-col md:flex-row gap-8">
+        <DocsSidebar currentPage={currentPage} />
+        
+        <main class="flex-1 min-w-0">
+          <div class="doc-content">
+            <slot />
+          </div>
+        </main>
+      </div>
+    </div>
+    
+    <Footer />
+  </div>
+</Layout>
