@@ -1,20 +1,26 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import mdx from '@astrojs/mdx';
-import alpinejs from '@astrojs/alpinejs';
+import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    tailwind(), 
-    mdx(), 
-    alpinejs()
-  ],
-  markdown: {
-    shikiConfig: {
-      theme: 'github-dark',
-      wrap: true
-    }
-  }
+	integrations: [
+		starlight({
+			title: 'My Docs',
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			sidebar: [
+				{
+					label: 'Guides',
+					items: [
+						// Each item here is one entry in the navigation menu.
+						{ label: 'Example Guide', slug: 'guides/example' },
+					],
+				},
+				{
+					label: 'Reference',
+					autogenerate: { directory: 'reference' },
+				},
+			],
+		}),
+	],
 });
