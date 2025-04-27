@@ -74,6 +74,7 @@
 }
 
 svg.lucide {
+  display: inline;
   position: relative;
   transform: translate(0px, 21%);
 }

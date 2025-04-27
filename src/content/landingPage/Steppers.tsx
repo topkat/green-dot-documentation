@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TerminalDisplay from '../../components/TerminalDisplay';
 import { Code } from '@astrojs/starlight/components';
+import { PackageManagers } from 'starlight-package-managers';
 
 interface Step {
   id: string
@@ -55,31 +56,11 @@ const steps = [
   {
     id: 'apiService',
     title: `Api Service`,
-    content: <Code title='JP AZOJE POZJ ' lang='ts' code={`
-export const myService = schedule({
-    schedule: {
-        frequency: '0 * * * *',
-        frequencyDev: 'never', // if you want to set a different interval for dev env
-    },
-    async main(ctx) {
-        // this script will execute at configured CRON interval
-    },
-})
-`} />,
+    content: <span></span>,
   }, {
     id: 'schedule',
     title: `Scheduled Task`,
-    content: <Code title='JP AZOJE POZJ ' lang='ts' code={`
-export const mySchedule = schedule({
-    schedule: {
-        frequency: '0 * * * *',
-        frequencyDev: 'never', // if you want to set a different interval for dev env
-    },
-    async main(ctx) {
-        // this script will execute at configured CRON interval
-    },
-})
-`} />,
+    content: <span></span>,
   }, {
     id: 'seed',
     title: `Seed DB Service`,
