@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
+import react from '@astrojs/react';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -10,12 +10,17 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	site: 'https://stargazers.club', // TODO replace when in prod
 	integrations: [
+		react(),
 		starlight({
 			title: 'green_dot documentation',
+			components: {
+				SiteTitle: './src/components/SiteTitle.astro',
+				Hero: './src/components/SiteHero.astro',
+			},
 			editLink: {
 				baseUrl: 'https://github.com/withastro/starlight/edit/main/docs/', // TODO
 			},
-			logo: { src: 'logo.png' },
+			logo: { src: './src/assets/logo.png' },
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
 			sidebar: [
 				{
@@ -31,6 +36,10 @@ export default defineConfig({
 				},
 			],
 			customCss: [
+				// Fontsource files for to regular and semi-bold font weights.
+				'@fontsource/dm-mono/300.css',
+				'@fontsource/dm-mono/400.css',
+				'@fontsource/dm-mono/500.css',
 				// Path to your Tailwind base styles:
 				'./src/styles/global.css',
 			],

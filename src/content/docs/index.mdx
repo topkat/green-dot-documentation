@@ -3,23 +3,16 @@ title: green_dot
 description: The nodeJs Backend Framework
 template: splash
 hero:
-  tagline: The nodeJs Backend Framework
-  image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+  tagline: Fast, Secure & DX Friendly...
 ---
 
 import { Card, CardGrid, Code, FileTree, Steps, Tabs, TabItem, LinkCard, Aside} from '@astrojs/starlight/components';
 import CodeBlock from '../../components/CodeBlock.astro';
+import SiteHero from '../../components/SiteHero.astro'
 import { PackageManagers } from 'starlight-package-managers'
+import Steppers from '../landingPage/Steppers'
 
+<Steppers client:load />
 
 <Steps>
 
@@ -113,14 +106,15 @@ import { PackageManagers } from 'starlight-package-managers'
   title="TypeScript Interface Example"
   lang="ts"
 	twoslash
+	diff
   code={`
 // @noErrors
 console.log((1 + 2 + 3 + 4).toF
 //      ^^^                   ^|
 
 interface User {
-		id: string;
-		name: string;
+-		id: string;
++ 	name: string;
 		email: string;
 		createdAt: Date;
 }
@@ -148,14 +142,14 @@ Other content is also supported in asides.
 
 ### Using Standard Markdown Code Blocks
 
-```ts title='COUCOU TITLE' frame="terminal" showLineNumbers twoslash
+```ts title='COUCOU TITLE' frame="terminal" showLineNumbers twoslash diff
 // @noErrors
 console.log((1 + 2 + 3 + 4).toF
 //                            ^|
 
 interface User {
-		id: string;
-		name: string;
++ 	id: string;
+- 	name: string;
 		email: string;
 		createdAt: Date;
 }
