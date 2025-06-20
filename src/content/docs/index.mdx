@@ -1,226 +1,206 @@
 ---
-title: green_dot
-description: The nodeJs Backend Framework
+title: Green Dot documentation - Landing page
+description: DX friendly nodeJs Backend Framework
 template: splash
 hero:
-  tagline: Fast, Secure & DX Friendly...
+  tagline: Fast, Secure & DX Friendly
 ---
 
-import { Card, CardGrid, Code, FileTree, Steps, Tabs, TabItem, LinkCard, Aside} from '@astrojs/starlight/components';
-import CodeBlock from '../../components/CodeBlock.astro';
-import SiteHero from '../../components/SiteHero.astro'
-import { PackageManagers } from 'starlight-package-managers'
-import Steppers from '../landingPage/Steppers.astro'
-
-<Steppers client:load />
-
-<Steps>
-
-1. Import the component into your MDX file:
-
-	<Tabs syncKey="js">
-		<TabItem label="test">
-		```js
-			import { Steps } from '@astrojs/starlight/components';
-		```
-		</TabItem>
-		<TabItem label={"Test3"} icon="star">
-		```js
-			const steps = require('@astrojs/starlight/components')
-		```
-		</TabItem>
-	</Tabs>
-
-2. Wrap `<Steps>` around your ordered list items.
-
-	just another test
-
-	<Tabs syncKey="js">
-		<TabItem label="test">
-		```js
-			import { Steps } from '@astrojs/starlight/components';
-		```
-		</TabItem>
-		<TabItem label={"Test3"}>
-		```js
-			const steps = require('@astrojs/starlight/components')
-		```
-		</TabItem>
-	</Tabs>
-
-</Steps>
+import { Card, CardGrid, Code, LinkButton, Icon } from '@astrojs/starlight/components';
+import { ToyBrick, Database, KeySquare, ScanFace, User, SquareCode, BookCheck, Package, Ellipsis, CodeXml, Zap } from 'lucide-astro'
 
 
-<PackageManagers type="create" pkg="green_dot@latest" args="--template starlight" />
 
-## Next steps
+{/* 
+//  ╔═══ ╔══╗ ╔══╗ ╦  ╦ ═╦═ ╔══╗ ╔══╗ ╔═══
+//  ╚══╗ ╠═   ╠═╦╝ ╚╗ ║  ║  ║    ╠═   ╚══╗
+//  ═══╝ ╚══╝ ╩ ╚   ╚═╝ ═╩═ ╚══╝ ╚══╝ ═══╝
+ */}
+<h2 class='flex flex-row items-center mb-4'>
+<Icon name='seti:tsconfig' class='inline mr-3 text-accent-400' style={{display: 'inline'}} />
+Back / Front Type-safe API
+</h2>
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
-</CardGrid>
-
-<LinkCard
-  title="Internationalization"
-  href="/guides/i18n/"
-  description="Configure Starlight to support multiple languages."
-/>
-
-<CardGrid>
-  <LinkCard title="Authoring Markdown" href="/guides/authoring-content/" />
-  <LinkCard title="Components" href="/components/using-components/" />
-</CardGrid>
-
-<FileTree>
-
-- astro.config.mjs
-- package.json
-- src
-  - components
-    - Header.astro commentaire 1
-    - Title.astro comentaire 2
-	- testFold/
-		- **page1**
-		- page2
-		- ...
-  - pages/
-
-</FileTree>
-
-## Code Examples
-
-### Using Custom CodeBlock Component
-
-
-<Code 
-  title="TypeScript Interface Example"
-  lang="ts"
-	twoslash
-	diff
-  code={`
-// @noErrors
-console.log((1 + 2 + 3 + 4).toF
-//      ^^^                   ^|
-
-interface User {
--		id: string;
-+ 	name: string;
-		email: string;
-		createdAt: Date;
-}
-
-/** @example console.log('rr') */
-const createUser = (data: Omit<User, 'id' | 'createdAt'>): User => {
-		return {
-				id: crypto.randomUUID(),
-				...data,
-				createdAt: new Date()
-		};
-};
-  `}
-/>
-
-<Aside type="tip" title='Le saviez vous ?'>
-
-Other content is also supported in asides.
-
-```js
-// A code snippet, for example.
-```
-
-</Aside>
-
-### Using Standard Markdown Code Blocks
-
-```ts title='COUCOU TITLE' frame="terminal" showLineNumbers twoslash diff
-// @noErrors
-console.log((1 + 2 + 3 + 4).toF
-//                            ^|
-
-interface User {
-+ 	id: string;
-- 	name: string;
-		email: string;
-		createdAt: Date;
-}
-
-/** @example console.log('rr') */
-const createUser = (data: Omit<User, 'id' | 'createdAt'>): User => {
-		return {
-				id: crypto.randomUUID(),
-				...data,
-				createdAt: new Date()
-		};
-};
-
-```
+    Simply generate a new api route with `npx green_dot generate` and configure it:<br /><br />
 
 ```ts twoslash
-// @errors: 2540
-
-console.log((1 + 2 + 3 + 4).toFixed(2))
-//                            ^|
-
-/** A Basic Todo interface*/
-interface Todo {
-  title: string;
-}
-
-const todo: Readonly<Todo> = {
-  title: 'Delete inactive users',
-//  ^?
-}
-
-todo.title = 'Hello'
+function svc(config: {
+  for: [string | {role: string, hasValidatedEmail: boolean}],
+  main(ctx: { _id: string, role: 'appUser' }, body: {email: string})
+}) {}
+// ---cut---
+// @noErrors
+export const getUserByEmail = svc({
+    for: [
+       'customRole', 
+       { role: 'user', hasValidatedEmail: true }
+    ],
+    input: {
+        email: _.email().required(),
+    },
+    output: _.model('myDbName', 'user'),
+    rateLimiter: '10/min',
+    ...
+    async main(ctx, { email }) {
+    //                  ^?
+        return await db.user.getOne(ctx, { email }) // this db call will automatically apply mask and filter depending on user perm (see below)
+    },
+})
+```
+<br/>
+**Note**: the above will auto generate a route on `POST myDomain.com/get-user-by-email` based on the `const` value. You can modify this by adding a `route` and `method` config
+<br/>
+### Frontend usage 
+<br/>
+In frontend, you just have to import the SDK and use it like:<br/>
+```ts twoslash
+type User = {_id: string, name: string}
+const $ = { getUserByEmail(): Promise<User>, useQuery: {getUserByEmail(): User} }
+// ---cut---
+// @noErrors
+const user = await $.getUserByEmail()
+// OR if in the context of a react component (cache friendly, tanstack query)
+const user = $.useQuery.getUserByEmail()
+//      ^?
 ```
 
+    <LinkButton href="./guides/quickstart" variant="minimal" icon="external">
+       API services Doc
+    </LinkButton>
+    <LinkButton href="./guides/quickstart" variant="minimal" icon="external">
+      Frontend Usage Doc
+    </LinkButton>
 
-### Bash Commands
+<br />
+<br />
+{/* 
+//  ╦╗╔╦ ╔══╗ ╔═╗  ╔══╗ ╦    ╔═══
+//  ║╚╝║ ║  ║ ║  ║ ╠═   ║    ╚══╗
+//  ╩  ╩ ╚══╝ ╚══╝ ╚══╝ ╚══╝ ═══╝
+ */}
+<h2 class='flex flex-row mb-4'>
+<Database size={40} className='-mt-1 mr-2 text-accent-400' />
+Shared Models, Unified Security
+</h2>
 
-```bash 
-# Install dependencies
-npm install
+    Generate a new model and DAO (data access object) `npx green_dot generate` and configure it:<br /><br />
 
-# Start development server
-npm run dev
+```ts title='company.model.ts'
+export const companyModel = _.mongoModel(
+  // Automatic timestamp fields
+  ['creationDate', 'updateDate'], 
+  {
+      name: _.string().required(),
+      admin: _.ref('user').required(), // ref to user model
+      companyIdenfier: _.string().required().unique(), // unique fields
+})
 
-# Build for production
-npm run build
+export type CompanyModel = InferType<typeof companyModel>
+// type may differ when writing (create / update) vs reading
+export type CompanyModelWrite = InferTypeWrite<typeof companyModel>
+```
+<br/>
+Dao files are a way to configure the security of your model and expose automatically some method via API (getById, update...):
+<br/>
+```ts title='company.dao.ts'
+export const dao = {
+  type: 'mongo',
+  // EXPOSE: auto generate routes and SDK methods with configured access
+  expose: [{
+    for: 'appUser',
+    expose: ['getOne', 'create'],
+  }, {
+    for: 'admin',
+    expose: ['read', 'write'],
+  }],
+  // FILTER 
+  filter: [{
+    for: 'appUser',
+    filter: (ctx, filter) => {
+      filter.admin === ctx._id // forces admin fields to be equal to user._id
+    }
+  }],
+  // MASK
+  mask: [{
+    for: 'appUser',
+    mask: ctx => ({
+      sensitiveData: true
+    }),
+  },],
+  populate: [],
+} satisfies MongoDao<User>
+
+export default dao
 ```
 
-### Code Block with Title and Highlighting
+<br />
+<br />
 
-<CodeBlock 
-  title="Express Route Example"
-  lang="typescript"
-  code={`
-import express from 'express';
-import { UserController } from './controllers';
+{/* 
+//  ╦╗╔╦ ╔══╗ ╔══╗ ╔══╗
+//  ║╚╝║ ║  ║ ╠═╦╝ ╠═  
+//  ╩  ╩ ╚══╝ ╩ ╚  ╚══╝
+ */}
+<h2 class='flex flex-row mb-4'>
+And much more...
+</h2>
 
-const app = express();
-const router = express.Router();
 
-// Define routes
-router.get('/users', UserController.getAll);
-router.post('/users', UserController.create);
-router.get('/users/:id', UserController.getById);
+<CardGrid stagger>
+	<Card>
+    <h4 class='flex flex-row mb-4'>
+      <ToyBrick size={40} className='-mt-1 mr-2 text-accent-400' />
+      A powerful plugin system
+    </h4>
+    Actually 3 plugins can be installed when you run `npx green_dot@latest generate` for the first time:<br/><br/>
 
-// Register routes
-app.use('/api', router);
+    <User /> `GDmanagedLogin`: Managed JWT login, email and password updates with custom emails ([see doc](./plugins/managed-authentication))<br /><br />
+    <KeySquare /> `GDapiKeyAuthentication`: Managed 2FA, Pin Code or biometric authentication ([see doc](./plugins/double-authentication))<br /><br />
+    <ScanFace /> `GDdoubleAuthentication`: Api Key Authentication ([see doc](./plugins/double-authentication))<br />
 
-// Start server
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-  `}
-/>
+	</Card>
+	<Card>
+		<h4 class='flex flex-row mb-4'>
+      <SquareCode size={40} className='-mt-1 mr-2 text-accent-400' />
+      Loved by your IDE
+    </h4>
+    <div class="text-lg text-gray-600 dark:text-gray-300 font-light">
+      <BookCheck /> Whenever you are lost, just hover the name of anything green_dot to see a full documentation without leaving your IDE<br /><br />
+      <Package /> Cursor and VSCode plugins for specific syntax highlights and helpers<br /><br />
+      <CodeXml /> Use `gd_` snippets anywhere to help with writing code faster<br />
+    </div>
+	</Card>
+	<Card>
+    <h4 class='flex flex-row mb-4'>
+      <Zap size={40} className='-mt-1 mr-2 text-accent-400' />
+      Performance friendly
+    </h4>
+      * All your requests are automatically cached with `@tanstack/react-query` to use in frontend components without the need to `await` your requests
+      * refresh cache or disable it on demand via simple configuration (in API service or SDK directly)
+      * prefetch heavy requests via `$.prefetch.myHeavyRequest()` so that when you need them they'll load instantly
+      * defer requests to make them async `$.defer.myHeavyRequest()`
+    <LinkButton href="./reference/tanstack-query-and-caching" variant="minimal" icon="external">
+       Learn more about caching and performances
+    </LinkButton>
+	</Card>
+	<Card>
+		 <h4 class='flex flex-row mb-4'>
+      <Ellipsis size={40} className='-mt-1 mr-2 text-accent-400' />
+      Plus
+    </h4>
+      * File Generation from template via `npx green_dot generate`
+      * MongoDb integration (more database to come)
+      * Auto generates a swagger documentation
+      * Open Source
+    <div class='flex flex-row justify-center'>
+    <LinkButton href="./guides/quickstart" icon="right-arrow">
+      Quick Start
+    </LinkButton>
+    <LinkButton href="./guides/quickstart" variant="minimal" icon="external">
+      Read the docs
+    </LinkButton>
+    </div>
+	</Card>
+</CardGrid>
+
+

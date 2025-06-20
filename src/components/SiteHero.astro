@@ -1,17 +1,6 @@
 ---
 import { LinkButton } from "@astrojs/starlight/components";
 import TerminalDisplay from "./TerminalDisplay.astro";
-import {
-  ArrowRight,
-  BookOpen,
-  Rocket,
-  Check,
-  Zap,
-  ShieldCheck,
-  Laptop,
-  Code,
-  Laptop2,
-} from "lucide-astro";
 ---
 
 <div
@@ -19,37 +8,30 @@ import {
 >
   <div class="w-full md:w-1/2 flex flex-col items-start justify-center gap-4">
     <h1 class="site-title text-4xl md:text-6xl text-accent-100 font-light">
-      green_dot: simple thus scalable
+      green_dot
     </h1>
     <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-light">
-      A node.js framework that is:<br />
-      <Zap /> Fast<br />
-      <ShieldCheck /> Secure<br />
-      <Laptop /> DX Focused<br />
+      Security and DX focused NodeJs backend framework
     </p>
     <div class="sl-flex actions gap-6">
-      <LinkButton href="./" icon="right-arrow"> Quick Start </LinkButton>
-      <LinkButton href="./" variant="minimal" icon="external">
+      <LinkButton href="./guides/quickstart" icon="right-arrow">
+        Quick Start
+      </LinkButton>
+      <LinkButton href="./guides/quickstart" variant="minimal" icon="external">
         Read the docs
       </LinkButton>
     </div>
   </div>
   <div class="w-full md:w-1/2 flex items-center justify-center">
     <div
-      class="relative w-full max-w-lg aspect-[5/4.2] flex items-center justify-center"
+      class="relative w-full max-w-lg aspect-[5/4.2] flex flex-col items-center justify-center"
     >
       <!-- BLUR BG  -->
       <div class="overlay bg-accent-200/30 rounded-full blur-3xl"></div>
-      <TerminalDisplay>
-        <b>$ npx green_dot@latest generate</b><br /><br />
-        Installing dependencies...<br />
-        <Check class="w-4 h-4 inline-block mr-2" /> Project structure created<br
-        />
-        <Check class="w-4 h-4 inline-block mr-2" /> Dependencies installed<br />
-        <Check class="w-4 h-4 inline-block mr-2" /> Configuration generated<br
-        /><br />
-        <b>Ready to launch! <Rocket class="w-4 h-4 inline-block" /></b>
-      </TerminalDisplay>
+      <TerminalDisplay
+        code="npx green_dot@latest generate"
+        forceCopyBtnToShow
+      />
     </div>
   </div>
 </div>
