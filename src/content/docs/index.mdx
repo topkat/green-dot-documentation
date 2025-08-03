@@ -147,8 +147,8 @@ export const dao = {
     mask: ctx => ({
       // no one can read password
       password: true,
-      // dynamically hide fields according to user role
-      sensitiveData: ctx.isBusinessHolder,
+      // dynamically hide fields according to user perms
+      businessData: ctx.isBusinessHolder,
     }),
   }],
   populate: [],
