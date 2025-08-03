@@ -18,19 +18,23 @@ import { ToyBrick, Database, KeySquare, ScanFace, User, SquareCode, BookCheck, P
  */}
 <h2 class='flex flex-row items-center mb-4'>
 <Icon name='seti:tsconfig' class='inline mr-3 text-accent-400' style={{display: 'inline'}} />
-Back / Front Type-safe API
+API route declaration
 </h2>
 
-    Simply generate a new api route with `npx green_dot generate` and configure it:<br /><br />
+    Generate a new api route with `npx green_dot generate` and configure it:<br /><br />
 
-```ts twoslash
+```ts twoslash title=getUserByEmailCustom.api.ts
 function svc(config: {
   for: [string | {role: string, hasValidatedEmail: boolean}],
-  main(ctx: { _id: string, role: 'appUser' }, body: {email: string})
+  main(ctx: { _id: string, role: 'appUser' }, body: {email: string}),
+  /** Custom rate limiter for this route */
+  rateLimiter: string
+  /** Type output for security and backend / frontend type safety */
+  output
 }) {}
 // ---cut---
 // @noErrors
-export const getUserByEmail = svc({
+export const getUserByEmailCustom = svc({
     for: [
        'customRole', 
        { role: 'user', hasValidatedEmail: true }
@@ -43,7 +47,9 @@ export const getUserByEmail = svc({
     ...
     async main(ctx, { email }) {
     //                  ^?
-        return await db.user.getOne(ctx, { email }) // this db call will automatically apply mask and filter depending on user perm (see below)
+        // No need to worry about security here, this db call will automatically apply
+        // mask and filter depending on user perm (see below)
+        return await ctx.db.user.getOne({ email }) 
     },
 })
 ```
@@ -52,16 +58,22 @@ export const getUserByEmail = svc({
 <br/>
 ### Frontend usage 
 <br/>
-In frontend, you just have to import the SDK and use it like:<br/>
+In frontend, **everything is well typed**: you just have to import the generated SDK and use it like:<br/>
 ```ts twoslash
 type User = {_id: string, name: string}
-const $ = { getUserByEmail(): Promise<User>, useQuery: {getUserByEmail(): User} }
+const $ = { getUserByEmailCustom(): Promise<User>, useQuery: {getUserByEmailCustom(): User} }
 // ---cut---
+import { $ } from '@my-company/user-app-sdk'
+
 // @noErrors
-const user = await $.getUserByEmail()
-// OR if in the context of a react component (cache friendly, tanstack query)
-const user = $.useQuery.getUserByEmail()
-//      ^?
+const user = await $.getUserByEmailCustom()
+// OR if in the context of a react component (cache friendly with tanstack query)
+function MyReactComponent() {
+    const user = $.useQuery.getUserByEmailCustom()
+    //     ^?
+    return <div>Welcome {user.name}</div>
+    //                           ^?
+}
 ```
 
     <LinkButton href="./guides/quickstart" variant="minimal" icon="external">
@@ -83,7 +95,7 @@ const user = $.useQuery.getUserByEmail()
 Shared Models, Unified Security
 </h2>
 
-    Generate a new model and DAO (data access object) `npx green_dot generate` and configure it:<br /><br />
+    Generate a new model and DAO (data access object) with `npx green_dot generate` and configure it:<br /><br />
 
 ```ts title='company.model.ts'
 export const companyModel = _.mongoModel(
@@ -93,40 +105,52 @@ export const companyModel = _.mongoModel(
       name: _.string().required(),
       admin: _.ref('user').required(), // ref to user model
       companyIdenfier: _.string().required().unique(), // unique fields
-})
+  }
+)
 
 export type CompanyModel = InferType<typeof companyModel>
 // type may differ when writing (create / update) vs reading
 export type CompanyModelWrite = InferTypeWrite<typeof companyModel>
 ```
 <br/>
-Dao files are a way to configure the security of your model and expose automatically some method via API (getById, update...):
+Dao files are a way to configure the security of your model and expose automatically some method via API (getById, update...). Everything is unified in a single file so security is made easy and comprehensive:
 <br/>
 ```ts title='company.dao.ts'
 export const dao = {
-  type: 'mongo',
+  type: 'mongo', // other DBs drivers incoming
   // EXPOSE: auto generate routes and SDK methods with configured access
   expose: [{
     for: 'appUser',
-    expose: ['getOne', 'create'],
+    expose: ['getOne', 'create'], // so an appUser cannot update or delete
   }, {
     for: 'admin',
-    expose: ['read', 'write'],
+    expose: ['read', 'write'], // admin has full access
   }],
   // FILTER 
   filter: [{
     for: 'appUser',
     filter: (ctx, filter) => {
-      filter.admin === ctx._id // forces admin fields to be equal to user._id
+      // here, we force admin fields to be equal to user._id
+      // in other terms, user must be admin of the company to read/write model
+      filter.admin === ctx._id
     }
   }],
   // MASK
   mask: [{
     for: 'appUser',
     mask: ctx => ({
-      sensitiveData: true
+      // user cannot see businessData field
+      businessData: true,
     }),
-  },],
+  }, {
+    on: 'read',
+    mask: ctx => ({
+      // no one can read password
+      password: true,
+      // dynamically hide fields according to user role
+      sensitiveData: ctx.isBusinessHolder,
+    }),
+  }],
   populate: [],
 } satisfies MongoDao<User>
 
