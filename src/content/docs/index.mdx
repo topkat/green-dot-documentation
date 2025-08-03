@@ -54,7 +54,7 @@ export const getUserByEmailCustom = svc({
 })
 ```
 <br/>
-**Note**: the above will auto generate a route on `POST myDomain.com/get-user-by-email` based on the `const` value. You can modify this by adding a `route` and `method` config
+**Note**: the above will auto generate a route on `POST myDomain.com/get-user-by-email-custom` based on the `const` value. You can modify this by adding a `route` and `method` config
 <br/>
 ### Frontend usage 
 <br/>
@@ -151,7 +151,9 @@ export const dao = {
       businessData: ctx.isBusinessHolder,
     }),
   }],
-  populate: [],
+  // automatically populate (left join) data for this model,
+  // security is applied to any level of populated field
+  populate: [{ path: 'admin', select: ['firstName']}],
 } satisfies MongoDao<User>
 
 export default dao
