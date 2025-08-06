@@ -91,6 +91,8 @@ export function MyComponent() {
 
 ## Tracker Integration
 
+Tracker enable creating events in your database for anything like navigation, errors, apiCalls, clicks and any custom events (Post a github issue for any further documentation).
+
 If you want to enable tracking functionality, initialize it after the SDK:
 
 ```ts
