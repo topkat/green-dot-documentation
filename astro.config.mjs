@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://greendotjs.com', // TODO replace when in prod
+	site: 'https://greendotjs.com',
 	integrations: [
 		react(),
 		starlight({
@@ -18,7 +18,7 @@ export default defineConfig({
 				Hero: './src/components/SiteHero.astro',
 			},
 			editLink: {
-				baseUrl: 'https://github.com/topkat/green_dot', // TODO
+				baseUrl: 'https://github.com/topkat/green-dot-documentation/edit/master',
 			},
 			logo: { src: './src/assets/green_dot-logo.png' },
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/topkat/green_dot' }],

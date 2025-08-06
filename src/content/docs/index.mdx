@@ -6,9 +6,27 @@ hero:
   tagline: Fast, Secure & DX Friendly
 ---
 
+import GitHubButton from 'react-github-btn'
 import { Card, CardGrid, Code, LinkButton, Icon } from '@astrojs/starlight/components';
 import { ToyBrick, Database, KeySquare, ScanFace, User, SquareCode, BookCheck, Package, Ellipsis, CodeXml, Zap } from 'lucide-astro'
 
+{/* 
+//  ╔══╗ ╔══╗ ╔══╗ ══╦══ ╦  ╦ ╔══╗ ╔══╗ ╔═══
+//  ╠═   ╠═   ╠══╣   ║   ║  ║ ╠═╦╝ ╠═   ╚══╗
+//  ╩    ╚══╝ ╩  ╩   ╩   ╚══╝ ╩ ╚  ╚══╝ ═══╝
+ */}
+
+## Features Overview
+
+🧭 Back/Front [Type-safe API route declarations](/guides/api-services/), shared models   
+🔒 Unified [model definitions and security configuration](/guides/models-and-daos/)  
+🔌 Powerful [plugin system](/plugins/1_plugins/) (Managed Login, ApiKey Login...) (BETA)  
+🪄 File generation to generate project, databases, apps, models...so you get up and running in no time
+🗃️ MongoDB integration with all the way type safety (others database drivers coming soon)  
+👨‍💻 DX and intellisense friendly  
+🏗️ Generate it's own SDK to use in frontend, get your backend data without await, useEffects or state management: (Eg: `const result = $.useQuery.myApiRoute()`)  
+⚡  Fully cached in frontend via TanStack Query  
+📦 [VSCode / Cursor Plugin](https://marketplace.visualstudio.com/items?itemName=topkat.green-dot-vscode-module)
 
 
 {/* 
