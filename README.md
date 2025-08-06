@@ -1,54 +1,40 @@
-# Starlight Starter Kit: Basics
+# Green Dot Documentation
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Documentation site for [Green Dot](https://www.greendotjs.com/), a security and DX focused Node.js backend framework.
 
-```
-npm create astro@latest -- --template starlight
-```
+=> [green_dot documentation website](https://www.greendotjs.com/)
+=> [green_dot repo](https://github.com/topkat/green_dot)
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/starlight/tree/main/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/starlight/tree/main/examples/basics)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/withastro/starlight&create_from_path=examples/basics)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwithastro%2Fstarlight%2Ftree%2Fmain%2Fexamples%2Fbasics&project-name=my-starlight-docs&repository-name=my-starlight-docs)
+Feel free to contribute, fork or pull request 🚀
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🚀 Quick Start
 
-## 🚀 Project Structure
+```bash
+# Install dependencies
+yarn install
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+# Start development server
+yarn dev
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   ├── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+# Build for production
+yarn build
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## 📚 What's Inside
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+- **API Services** - Type-safe route generation with automatic security
+- **Models & DAOs** - Shared models with unified security policies
+- **Authentication Plugins** - Managed login, 2FA, and API key auth
+- **Frontend SDK** - Auto-generated, fully typed client libraries
+- **Performance** - Built-in caching with TanStack Query
 
-Static assets, like favicons, can be placed in the `public/` directory.
+## 🛠 Tech Stack
 
-## 🧞 Commands
+- [Astro](https://astro.build/) - Static site generator
+- [Starlight](https://starlight.astro.build/) - Documentation theme
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
 
-All commands are run from the root of the project, from a terminal:
+## 🤝 Contributing
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+This documentation is open source. Feel free to submit issues and pull requests.
