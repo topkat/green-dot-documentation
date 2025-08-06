@@ -3,21 +3,12 @@ title: green_dot Frontend Usage
 description: This guide explains how to integrate and use the Green Dot SDK in your frontend application.
 ---
 
-## SDK generation
+## General usage
 
-You can generate the SDK in local folder and use that in your frontend if your backend and frontend share the same repository. If not, you have the option to automatically publish npm package for your SDK through command line:
+You can:
+* publish your generated SDKs packages via NPM (`npm run publishSdks`) or 
+* reference them from local files if the backend and frontend are in the same repo OR if you use the `generateSdkConfig.copyFolderToLocationOnBuild` option in `gd.config.ts` to copy SDK files to local frontend repo
 
-```ts
-yarn publishSdks
-```
-
-## Installation
-
-First, install the SDK in your frontend project:
-
-```bash
-npm install appUserSDK
-```
 
 ## SDK Initialization
 
@@ -25,11 +16,27 @@ The SDK needs to be initialized before use. Here's how to set it up:
 
 ```ts
 import {$, initSdk} from 'appUserSDK'
+import {QueryClient} from '@tanstack/react-query'
+
+/** Query client has to be initiated in frontend and will allow request caching and the use of $.useQuery.myRequest (see below) */
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity, retry: 0 } } })
 
 initSdk({
   // Required: Your project name
   projectName: 'myProject',
   
+  // Required: Function to get device ID
+  getDeviceId: () => getDeviceInfos()._id,
+
+  // Required: Query client for caching requests
+  getQueryClient: () => queryClient,
+
+  // Required: Server configuration
+  serverUrls: {
+    backend: serverUrl,
+    default: 'backend',
+  },
+
   // Optional: Callback when user logs out
   onLogout: () => {
     // Clear session state
@@ -42,30 +49,18 @@ initSdk({
     })
   },
 
-  // Required: Function to get device ID
-  getDeviceId: () => getDeviceInfos()._id,
-
   // Optional: Callback when SDK is initialized
   onSdkInitialized: () => {/** TODO */ },
 
-  // Required: Query client for caching
-  getQueryClient: () => queryClient,
-
-  // Required: Local storage handlers
+  // Optional: Local storage handlers, if not set, the cache will be used, which will reset state with each reload
   localStorageSet: (name, val) => localStorage.setItem(name, val),
   localStorageGet: name => localStorage.getItem(name),
   localStorageRemove: name => localStorage.removeItem(name),
 
-  // Required: Token configuration
+  // Optional: Token configuration
   refreshTokenExpirationMinutes,
   refreshTokenErrorMessage: t('errors.wrongToken'),
   wrongTokenErrorMessage: t(`errors.refreshTokenError`),
-
-  // Required: Server configuration
-  serverUrls: {
-    backend: serverUrl,
-    default: 'backend',
-  },
 
   // Optional: Error handler
   onErrorCallback: backendErrHandler,
@@ -74,12 +69,24 @@ initSdk({
 
 ## Using the SDK
 
-Once initialized, you can use the SDK to make type-safe API calls. The SDK automatically generates methods based on your backend routes:
+Once initialized, you can use the SDK to make **type-safe API calls**. The SDK automatically generates methods based on your backend routes:
 
 ```ts
-// Example API calls
-const userExists = await $.checkUserExists({ email: 'user@example.com' })
-const userData = await $.getUserProfile()
+// Example API calls async
+async function myFn() {
+  const userExists = await $.checkUserExists({ email: 'user@example.com' })
+  const userData = await $.getUserProfile()
+  console.log(userExists) // boolean
+  console.log(userData) // type User
+}
+
+// In a react component
+export function MyComponent() {
+
+  const [ user ] = $.useQuery.getUserProfile() // uses React.Suspense and react-query under the hood
+
+  return <div>Greetings {user.firstName}!</div>
+}
 ```
 
 ## Tracker Integration
@@ -92,7 +99,7 @@ if (isTrackerEnabled) {
     projectName,
     getDeviceId: () => getDeviceInfos()._id,
   })
-  initTrackerListeners({ isDev })
+  initTrackerListeners({ isDev: window.location.includes('localhost') })
 }
 ```
 
@@ -102,14 +109,14 @@ if (isTrackerEnabled) {
 - 🗄️ Local storage management
 - 🔒 Secure authentication
 - 📱 Device tracking support
-- 🚀 Type-safe API calls
+- 🚀 Fully Type-safe API calls
 - 💾 Built-in caching with TanStack Query
 
 ## Best Practices
 
 1. Always initialize the SDK before making any API calls
 2. Handle the `onLogout` callback to properly clean up user data
-3. Use the provided local storage handlers for consistent data management
+3. Provide local storage handlers for consistent data management
 4. Implement proper error handling using the `onErrorCallback`
 5. Keep your device ID management consistent across the application
 
